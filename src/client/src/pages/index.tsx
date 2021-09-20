@@ -5,7 +5,7 @@ export default function IndexPage() {
   const [data, setData] = React.useState<string[]>([]);
 
   const query = React.useCallback(async function () {
-    const res = await window.fetch('/api');
+    const res = await window.fetch('/api/hello');
     const json = await res.json();
     setData(json);
   }, [])
