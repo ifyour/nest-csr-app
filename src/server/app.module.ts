@@ -4,6 +4,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { HelloModule } from './api/hello/hello.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './api/users/users.module'
+import { AuthModule } from './api/auth/auth.module';
+
 
 @Module({
   imports: [
@@ -16,8 +18,9 @@ import { UsersModule } from './api/users/users.module'
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
-    HelloModule,
+    AuthModule,
     UsersModule,
+    HelloModule,
   ],
 })
 export class AppModule { }
