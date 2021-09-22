@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
+import { ResProps } from '@/server/constant/type';
 
 @Injectable()
 export class UsersService {
@@ -19,12 +20,25 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  async findAll(): ResProps<User[]> {
+    const users = await this.usersRepository.find();
+    return {
+      stat: true,
+      msg: 'done',
+      data: users,
+    }
   }
 
-  findOne(username: string): Promise<User | undefined> {
-    return this.usersRepository.findOne({ where: { username } });
+  async findOne(username: string): ResProps<User | null> {
+    const user = await this.usersRepository.findOne({ where: { username } });
+    if (user) {
+      return {
+        stat: true,
+        msg: 'done',
+        data: user
+      };
+    }
+    return { stat: false, msg: '未找到该用户', data: null };
   }
 
   async remove(id: string): Promise<void> {
