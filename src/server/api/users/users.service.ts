@@ -15,7 +15,6 @@ export class UsersService {
   create(createUserDto: CreateUserDto): Promise<User> {
     const user = new User();
     user.username = createUserDto.username;
-    // TODO: 后期改为加密方式存储密码
     user.password = createUserDto.password;
     return this.usersRepository.save(user);
   }
@@ -39,6 +38,13 @@ export class UsersService {
       };
     }
     return { stat: false, msg: '未找到该用户', data: null };
+  }
+
+  findOneIncludePassword(username: string): Promise<User | undefined> {
+    return this.usersRepository.findOne({
+      where: { username },
+      select: ['id', 'username', 'password', 'isActive'],
+    });
   }
 
   async remove(id: string): Promise<void> {
