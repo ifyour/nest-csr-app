@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { ResProps } from '@/server/constant/type';
 
 @Controller('users')
 export class UsersController {
@@ -14,12 +13,12 @@ export class UsersController {
   }
 
   @Get()
-  findAll(): ResProps<User[]> {
+  findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':username')
-  findOne(@Param('username') username: string): ResProps<User | null> {
+  findOne(@Param('username') username: string): Promise<User | null> {
     return this.usersService.findOne(username);
   }
 

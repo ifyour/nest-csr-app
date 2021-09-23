@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
-import { ResProps } from '@/server/constant/type';
 
 @Injectable()
 export class UsersService {
@@ -19,25 +18,16 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async findAll(): ResProps<User[]> {
-    const users = await this.usersRepository.find();
-    return {
-      stat: true,
-      msg: 'done',
-      data: users,
-    }
+  findAll(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
-  async findOne(username: string): ResProps<User | null> {
+  async findOne(username: string): Promise<User | null> {
     const user = await this.usersRepository.findOne({ where: { username } });
-    if (user) {
-      return {
-        stat: true,
-        msg: 'done',
-        data: user
-      };
+    if (!user) {
+      throw new NotFoundException();
     }
-    return { stat: false, msg: '未找到该用户', data: null };
+    return user;
   }
 
   findOneIncludePassword(username: string): Promise<User | undefined> {
