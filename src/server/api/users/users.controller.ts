@@ -5,7 +5,7 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -17,9 +17,9 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
-    return this.usersService.findOne(id);
+  @Get(':username')
+  findOne(@Param('username') username: string): Promise<User | null> {
+    return this.usersService.findOne(username);
   }
 
   @Delete(':id')
