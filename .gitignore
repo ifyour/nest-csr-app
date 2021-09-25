@@ -36,3 +36,6 @@ lerna-debug.log*
 
 # migration temp db file
 database.sqlite
+
+# env
+.env
