@@ -5,7 +5,6 @@ import { HelloModule } from './api/hello/hello.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './api/users/users.module'
 import { AuthModule } from './api/auth/auth.module';
-import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 
@@ -32,6 +31,5 @@ import * as Joi from 'joi';
     UsersModule,
     HelloModule,
   ],
-  controllers: [AppController],
 })
 export class AppModule { }
