@@ -39,11 +39,13 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('logout')
+  @UseInterceptors(ClassSerializerInterceptor)
   async getProfile(@Request() request: RequestWithUser) {
     const { user } = request;
     await this.userService.removeRefreshToken(user.id);
     const cookie = this.authService.getCookieForLogout();
     request.res.setHeader('Set-Cookie', cookie);
+    return user;
   }
 
 }
