@@ -45,7 +45,11 @@ export class AuthController {
     await this.userService.removeRefreshToken(user.id);
     const cookie = this.authService.getCookieForLogout();
     request.res.setHeader('Set-Cookie', cookie);
-    return user;
+    return {
+      stat: true,
+      msg: '注销成功',
+      data: user,
+    };
   }
 
 }
