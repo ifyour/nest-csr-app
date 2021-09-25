@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 
@@ -30,6 +32,22 @@ export class UsersService {
     return user;
   }
 
+  async findOneById(userId: number): Promise<User | null> {
+    const user = await this.usersRepository.findOne(userId);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
+  }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, userId: number) {
+    const user = await this.findOneById(userId);
+    const isRefreshTokenMatched = await bcrypt.compare(refreshToken, user.currentHashedRefreshToken);
+    if (isRefreshTokenMatched) {
+      return user;
+    }
+  }
+
   findOneIncludePassword(username: string): Promise<User | undefined> {
     return this.usersRepository.findOne({
       where: { username },
@@ -40,4 +58,14 @@ export class UsersService {
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
+
+  async setCurrentRefreshToken(userId: number, refreshToken: string) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.usersRepository.update(userId, { currentHashedRefreshToken });
+  }
+
+  async removeRefreshToken(userId: number) {
+    await this.usersRepository.update(userId, { currentHashedRefreshToken: null })
+  }
+
 }
