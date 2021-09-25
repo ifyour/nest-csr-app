@@ -1,4 +1,4 @@
-import { Controller, Request, Post, UseGuards, Get } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Get, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { LocalAuthGuard } from './local-auth.guard';
 import { AuthService } from './auth.service';
 import { RequestWithUser } from './requestWithUser.interface';
@@ -29,6 +29,7 @@ export class AuthController {
 
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
+  @UseInterceptors(ClassSerializerInterceptor)
   async refresh(@Request() request: RequestWithUser) {
     const { user } = request;
     const accessTokenCookie = this.authService.getCookieWithJwtAccessToken(user.id, user.username);
