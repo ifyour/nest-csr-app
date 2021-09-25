@@ -14,8 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log('%c [ payload ]', 'font-size:13px; background:red; color:white;', payload)
-    // 这里可以查数据库，从而在我们的 Request 中得到一个更丰富的用户对象
     return { id: payload.sub, username: payload.username };
   }
 }

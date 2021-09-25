@@ -5,7 +5,7 @@ import { AuthService } from './api/auth/auth.service';
 
 @Controller()
 export class AppController {
-  // TypeScript 构造函数类型定义短写语法，参考链接：
+  // TypeScript 构造函数，类型定义短语法，参考链接：
   // https://dev.to/satansdeer/typescript-constructor-shorthand-3ibd
   constructor(private authService: AuthService) { }
 
